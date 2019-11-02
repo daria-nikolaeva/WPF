@@ -56,8 +56,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Checker.cs" />
     <Compile Include="CostCheck.cs" />
+    <Compile Include="ICheck.cs" />
     <Compile Include="Repositories.cs" />
+    <Compile Include="RichCheck.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

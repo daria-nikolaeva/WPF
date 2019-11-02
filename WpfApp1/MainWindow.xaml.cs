@@ -23,14 +23,15 @@ namespace WpfApp1
     {
         Repositories repository = new Repositories();
        
-        CostCheck costCheck;
+        Checker checker;
         public MainWindow()
         {
           
             InitializeComponent();
             
-            costCheck = new CostCheck(repository);
-            costCheck.ValidChanged += checkValidness;
+                    
+            checker= new Checker(repository);
+            checker.ValidChanged += checkValidness;
 
             repository.CollectionCanged += updateListView;
             repository.Add(new Phone() { Name="Телефон 1", Count=1, Cost=10000});

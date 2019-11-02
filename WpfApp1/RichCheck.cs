@@ -1,29 +1,25 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace WpfApp1
 {
-    class CostCheck:ICheck
+    class RichCheck:ICheck
     {
-       
-       
         public bool CanCheck(Object obj)
         {
-            return obj is Phone;
+            return (obj is Phone && (obj as Phone).Cost>=20000);
+             
         }
-       
 
-       
+
+
         public bool Check(Object phone)
         {
-            return (phone as Phone).Cost >= 5000;
-           
+            return !((phone as Phone).Count >1);
+
         }
     }
 }
