@@ -185,6 +185,9 @@ namespace WpfApp1
             }
         }
 
-
+        private void Search_KeyUp(object sender, KeyEventArgs e)
+        {
+         
+        }
     }
 }

@@ -19,7 +19,7 @@
     <DockPanel x:Name="docPanel">
         
         <StackPanel DockPanel.Dock="Right">
-          
+            <TextBox x:Name="Search"  MinWidth="200" KeyUp="Search_KeyUp"></TextBox>
             <TextBox x:Name="textBox" MinWidth="200"></TextBox>
             <ListView x:Name="listView" SelectionChanged="listView_SelectionChanged">
                 <ListView.View>
