@@ -6,6 +6,16 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ControlTemplate TargetType="Button" x:Key="buttonTemplate">
+            <Border CornerRadius="25" BorderBrush="Azure" BorderThickness="2" Background="#FFB4F3DE">
+                <ContentControl Margin="5" HorizontalAlignment="Stretch" />
+
+            </Border>
+            
+        </ControlTemplate>
+        
+    </Window.Resources>
     <DockPanel x:Name="docPanel">
         
         <StackPanel DockPanel.Dock="Right">
@@ -20,9 +30,10 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+           
         </StackPanel>
         <DockPanel DockPanel.Dock="Top">
-            <Image MinWidth="100" DockPanel.Dock="Left"></Image>
+            <Image x:Name="image" MinWidth="100" MinHeight="100" MaxHeight="100" MaxWidth="100" DockPanel.Dock="Left"></Image>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"></ColumnDefinition>

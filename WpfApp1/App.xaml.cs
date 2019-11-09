@@ -13,5 +13,13 @@ namespace WpfApp1
     /// </summary>
     public partial class App : Application
     {
+         void StartupDo(Object sender, StartupEventArgs e)
+        {
+           
+            MainWindow mainWindow = new MainWindow();
+
+            mainWindow.Show();
+
+        }
     }
 }

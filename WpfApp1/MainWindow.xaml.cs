@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.Windows.Resources;
+using System.IO;
 
 namespace WpfApp1
 {
@@ -28,12 +31,17 @@ namespace WpfApp1
         {
           
             InitializeComponent();
+
+
+           
             
-                    
+            
             checker= new Checker(repository);
             checker.ValidChanged += checkValidness;
 
             repository.CollectionCanged += updateListView;
+           
+
             repository.Add(new Phone() { Name="Телефон 1", Count=1, Cost=10000});
             repository.Add(new Phone() { Name="Телефон 2", Count=4, Cost=15000});
             repository.Add(new Phone() { Name="Телефон 3", Count=3, Cost=45000});
@@ -74,8 +82,8 @@ namespace WpfApp1
             button.MaxWidth = 120;
             Grid.SetColumn(button, 0);
             Grid.SetRow(button, 1);
-           
-            button.Content = "Сохранить телефон";
+            button.Click += Button_Click_2;
+            button.Content = "Загрузить картинку";
 
             button = new Button();
             grid.Children.Add(button);
@@ -83,7 +91,7 @@ namespace WpfApp1
             button.MaxWidth = 120;
             Grid.SetColumn(button, 1);
             Grid.SetRow(button, 1);
-          
+            button.Template = (ControlTemplate)FindResource("buttonTemplate");
             button.Content = "Загрузить из файла";
 
            
@@ -110,13 +118,49 @@ namespace WpfApp1
             }
         }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            if (listView.SelectedIndex >= 0)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Images(*.jpg;*.jpeg;*bmp;*gif;*png)|*.jpg;*.jpeg;*bmp;*gif;*png";
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string soursePath = openFileDialog.FileName;
+                   
+                    string newPath = "images/"+openFileDialog.SafeFileName;
+                    if (!Directory.Exists("images /"))
+                    {
+                        Directory.CreateDirectory("images /");
+                    }
+                    while (File.Exists(newPath))
+                    {
+                        string[] arr = newPath.Split('.');
+                        arr[arr.Length-2] = arr[arr.Length-2]+"1";
+                        newPath = string.Join(".", arr);
+                    }
+                    File.Copy(soursePath,newPath);
+
+                    Phone phone;
+                    if(!repository.tryGetAt(listView.SelectedIndex, out phone))
+                    {
+                        return;
+                    }
+                    phone.Image = newPath;
+                    image.Source = phone.ImageSourse;
+
+                }
+               
+            }
+        }
+
         private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Phone phone;
             if ((repository.tryGetAt(listView.SelectedIndex,out phone)))
             {
                 DataContext = phone;
-
+                image.Source = phone.ImageSourse;
             }
            
 
@@ -140,5 +184,7 @@ namespace WpfApp1
                 textBox.Text = "Отсутствуют дешевые или дорогие";
             }
         }
+
+
     }
 }
