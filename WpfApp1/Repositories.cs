@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace WpfApp1
 {
@@ -45,11 +47,57 @@ namespace WpfApp1
             return false;
         }
 
-       
-    }
+        public ArrayList getPhones()
+        {
+            return phones;
+        }
        
 
-       
-      
-    
+        public void SaveToXML(string path)
+        {
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            xmlWriterSettings.Async = false;
+            using(StreamWriter streamWriter=new StreamWriter(path))
+            {
+                using (XmlWriter xml = XmlWriter.Create(streamWriter,xmlWriterSettings))
+                {
+                    xml.WriteStartDocument();
+                    xml.WriteStartElement("PhoneList");
+
+                         xml.WriteStartElement("Phones");
+                    for(int i = 0; i < phones.Count; i++)
+                    {
+                        Phone phone = phones[i] as Phone;
+
+                        xml.WriteStartElement("Phone");
+                        xml.WriteAttributeString("Name", phone.Name);
+                        xml.WriteAttributeString("Count", phone.Count.ToString());
+                        xml.WriteAttributeString("Cost", phone.Cost.ToString());
+                        xml.WriteAttributeString("Image", phone.Image);
+
+                        xml.WriteEndElement();
+                    }
+                   
+                    xml.WriteEndElement();
+                    xml.WriteStartElement("PhonesCount");
+                    xml.WriteAttributeString("TotalCount", phones.Count.ToString());
+                    xml.WriteEndElement();
+                    xml.WriteEndElement();
+                }
+            }
+           
+        }
+        public void LoadXML(string path)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(path);
+            XmlElement xRoot = xml.DocumentElement;
+            XmlElement xmlPhones = xRoot.GetElementsByTagName("Phones")[0] as XmlElement;
+            foreach (XmlElement xmlPhone in xmlPhones.ChildNodes)
+            {
+                this.phones.Add(new Phone(xmlPhone));
+            }
+            
+        }
+    }
 }

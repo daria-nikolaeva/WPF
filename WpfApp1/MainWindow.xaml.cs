@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Windows.Resources;
 using System.IO;
+using System.ComponentModel.DataAnnotations;
 
 namespace WpfApp1
 {
@@ -40,14 +41,25 @@ namespace WpfApp1
             checker.ValidChanged += checkValidness;
 
             repository.CollectionCanged += updateListView;
-           
 
-            repository.Add(new Phone() { Name="Телефон 1", Count=1, Cost=10000});
-            repository.Add(new Phone() { Name="Телефон 2", Count=4, Cost=15000});
-            repository.Add(new Phone() { Name="Телефон 3", Count=3, Cost=45000});
-            repository.Add(new Phone() { Name="Телефон 4", Count=2, Cost=20000});
+            Phone phone = new Phone() { Name="te",Count=1,Cost=1000};
+            List<System.ComponentModel.DataAnnotations.ValidationResult> errors = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            ValidationContext context = new ValidationContext(phone);
+            if(!Validator.TryValidateObject(phone, context, errors, true))
+            {
+                string message = "";
+                foreach(var error in errors)
+                {
+                    message += error.ErrorMessage + '\n';
+                }
+                MessageBox.Show(message);
+            }
+            //repository.Add(new Phone() { Name="Телефон 1", Count=1, Cost=10000});
+            //repository.Add(new Phone() { Name="Телефон 2", Count=4, Cost=15000});
+            //repository.Add(new Phone() { Name="Телефон 3", Count=3, Cost=45000});
+            //repository.Add(new Phone() { Name="Телефон 4", Count=2, Cost=20000});
 
-          
+            //repository.SaveToXML("phones.xml");
 
             Grid grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -187,7 +199,19 @@ namespace WpfApp1
 
         private void Search_KeyUp(object sender, KeyEventArgs e)
         {
-         
+           
+         IEnumerable<Phone> result = from phone in repository.getPhones().Cast<Phone>()
+                                     select phone;
+
+            IEnumerable<Phone> newResult=result
+                .Where<Phone>(phone => { return phone.Cost > 10000; })
+                .ToArray<Phone>();
+            listView.ItemsSource = newResult;
+
+        }
+        private bool filter(Phone phone)
+        {
+            return phone.Cost > 10000;
         }
     }
 }
